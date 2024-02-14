@@ -12,20 +12,9 @@ public class Dish {
     private String name;
     private String description;
     private BigDecimal price;
+    @Enumerated(EnumType.STRING) // This tells JPA to store the enum as a string in the database
+    private DishCategory category;
 
-    ////////////////////////
-    //// Dish Category: ////
-    ////////////////////////
-    private Boolean catLunchSpecial;
-    private Boolean catAppetizer;
-    private Boolean catSoup;
-    private Boolean catChefSuggestion;
-    private Boolean catNoodlesAndRice;
-    private Boolean catChicken;
-    private Boolean catSeafood;
-    private Boolean catVegetables;
-
-    ////////////////////////////
     private Boolean isSpicy;
     private Boolean isPescatarian;
     private Boolean isVegetarian;

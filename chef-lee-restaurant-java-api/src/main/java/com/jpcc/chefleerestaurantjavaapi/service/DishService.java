@@ -1,4 +1,4 @@
-package com.jpcc.chefleerestaurantjavaapi.services;
+package com.jpcc.chefleerestaurantjavaapi.service;
 
 import com.jpcc.chefleerestaurantjavaapi.domain.Dish;
 import com.jpcc.chefleerestaurantjavaapi.repository.DishRepository;
@@ -19,5 +19,14 @@ public class DishService {
     }
     public List<Dish> getAllCurrentDishes(){
         return dishRepository.findByCurrentlyOnMenu(true);
+    }
+    public void deleteDish(Dish dishToDelete){
+        dishRepository.delete(dishToDelete);
+    }
+    public void saveDish(Dish dishToSave){
+        dishRepository.save(dishToSave);
+    }
+    public void updateDish(Dish updatedDish){
+        dishRepository.save(updatedDish);
     }
 }

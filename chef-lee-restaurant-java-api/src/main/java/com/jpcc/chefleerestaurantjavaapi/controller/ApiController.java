@@ -1,7 +1,7 @@
 package com.jpcc.chefleerestaurantjavaapi.controller;
 
 import com.jpcc.chefleerestaurantjavaapi.domain.Dish;
-import com.jpcc.chefleerestaurantjavaapi.services.DishService;
+import com.jpcc.chefleerestaurantjavaapi.service.DishService;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +20,7 @@ public class ApiController {
         this.dishService = dishService;
     }
 
-    @GetMapping("/dishes")
+    @GetMapping("/getDishes")
     public ResponseEntity<List<Dish>> getDishes(){
         List<Dish> currentDishes = dishService.getAllDishes();
         return ResponseEntity.ok(currentDishes);
