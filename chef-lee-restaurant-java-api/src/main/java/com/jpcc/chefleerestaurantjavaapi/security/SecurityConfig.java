@@ -60,23 +60,19 @@ public class SecurityConfig {
 	@Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
-//        .authorizeHttpRequests(request -> request.requestMatchers("**").permitAll().anyRequest().authenticated())
                 .authorizeHttpRequests(request -> request
-//                                		.requestMatchers("/api/v1/auth/**").permitAll()
                                         .requestMatchers("/admin/**").hasRole(Role.ADMIN.name())
                                         .requestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**")).permitAll()
                                         .requestMatchers("/products").authenticated()
                                         .requestMatchers("/success").authenticated()
-                                        .requestMatchers("/register").permitAll()
+                                        .requestMatchers("/signin").permitAll()
                                         .anyRequest().permitAll()
                         )
                 .headers(header -> header.frameOptions(frameOption -> frameOption.disable()))
-//                .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .formLogin(login -> {login
 		        	.loginPage("/signin")
-//		        	.failureUrl("/failure"); // this can be linked to a failure message on the failure template
 		        	.usernameParameter("email")
 		        	.successHandler(new AuthenticationSuccessHandler() {
 						
