@@ -1,0 +1,21 @@
+.menu-grid {
+    display: grid;
+    grid-template-columns: 1fr; /* Default to single column */
+    gap: 20px;
+    padding: 0;
+    list-style: none;
+  }
+  
+  .menu-item {
+    background: #f0f0f0; /* Light grey background */
+    padding: 15px;
+    border-radius: 5px;
+  }
+  
+  /* Media query for large screens */
+  @media (min-width: 768px) {
+    .menu-grid {
+      grid-template-columns: repeat(2, 1fr); /* 2 columns on large screens */
+    }
+  }
+  

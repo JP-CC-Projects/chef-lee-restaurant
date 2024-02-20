@@ -1,0 +1,69 @@
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #004D40;
+    color: #FFFFFF;
+    padding: 10px 20px;
+}
+
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    width: 80%;
+    margin: 0 auto;
+    margin-top: 50px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #004D40;
+    color: white;
+}
+
+.elevate-button {
+    background-color: #004D40;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+input[type="text"], select {
+    padding: 4px;
+    margin-right: 4px;
+    width: auto; /* Adjust width as needed */
+}
+
+form#createDishForm td {
+    padding: 4px;
+}
+
+button[type="submit"] {
+    cursor: pointer;
+}
+#priceHeader {
+    width: 4rem;
+}
+table input.price {
+    width: 4rem;
+}

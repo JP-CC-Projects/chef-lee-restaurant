@@ -1,0 +1,51 @@
+/* Header.css */
+.header {
+    position: -webkit-sticky; /* For Safari */
+    position: sticky;
+    top: 0;
+    z-index: 1000; /* Ensure the header is above other content */
+    background-color: #000000; /* Consider a solid color for better visibility */
+    padding: 10px 0;
+    box-shadow: 0 2px 4px rgba(80, 80, 80, 0.1);
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.nav-links {
+    list-style: none;
+    padding: 0;
+    display: flex;
+}
+
+.nav-links.left, .nav-links.right {
+    flex-grow: 1;
+}
+
+.nav-links li {
+    display: inline;
+    margin: 0 15px;
+}
+
+.nav-links li a {
+    text-decoration: none;
+    color: #ffe100;
+    font-weight: 500;
+}
+
+.nav-links li a:hover {
+    color: #d1c300;
+}
+
+.logo-above {
+    display: block; /* Makes the image a block element to appear on its own line */
+    margin: 0 auto 20px; /* Centers the image and adds space below */
+    max-height: 100px; /* Adjust based on your preference */
+}
+
+.logo {
+    max-height: 50px; /* Adjust based on your preference */
+}

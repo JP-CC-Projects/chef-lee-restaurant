@@ -1,0 +1,19 @@
+/* StoreHoursComponent.css */
+.flex-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+  }
+  
+  .store-hours, .store-image {
+    flex: 1; /* Each child takes up an equal amount of space */
+    padding: 20px;
+  }
+  
+  .food-image img {
+    width: 100%; /* Make image fully responsive within its container */
+    height: auto;
+    display: block; /* Removes bottom margin/padding */
+  }
+  

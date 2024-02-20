@@ -1,0 +1,33 @@
+/* HomePage.css */
+.parallax-container {
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+  
+  .parallax {
+    /* Adjust the height as needed */
+    height: 500px; 
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+  
+  #top-parallax-image {
+    background-image: url('../../../assets/bar.webp'); /* Update this path */
+  }
+  
+  #bottom-parallax-image {
+    background-image: url('../../../assets/flower.webp'); /* Update this path */
+  }
+  
+  .store-hours {
+    text-align: center;
+    padding: 50px 20px;
+    background: #fff; /* Light background for contrast */
+  }
+  
+  .store-hours h2 {
+    margin-bottom: 30px;
+  }
+  

@@ -3,6 +3,7 @@ package com.jpcc.chefleerestaurantjavaapi.service;
 import com.jpcc.chefleerestaurantjavaapi.domain.Dish;
 import com.jpcc.chefleerestaurantjavaapi.repository.DishRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -20,13 +21,22 @@ public class DishService {
     public List<Dish> getAllCurrentDishes(){
         return dishRepository.findByCurrentlyOnMenu(true);
     }
+    @Transactional
     public void deleteDish(Dish dishToDelete){
         dishRepository.delete(dishToDelete);
     }
+    @Transactional
     public void saveDish(Dish dishToSave){
         dishRepository.save(dishToSave);
     }
-    public void updateDish(Dish updatedDish){
-        dishRepository.save(updatedDish);
+    @Transactional
+    public boolean updateDish(Dish updatedDish){
+        System.out.println(updatedDish.getId());
+        if (dishRepository.existsById(updatedDish.getId())){
+            dishRepository.save(updatedDish);
+            System.out.println(updatedDish);
+            return true;
+        }
+        return false;
     }
 }

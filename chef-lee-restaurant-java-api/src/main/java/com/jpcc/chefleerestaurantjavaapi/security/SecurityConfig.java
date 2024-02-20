@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpServletResponseWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -33,8 +34,12 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 
 
@@ -42,6 +47,7 @@ import java.util.HashMap;
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
+
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final UserServiceImpl userService;
     private final JwtServiceImpl jwtService;
@@ -57,13 +63,28 @@ public class SecurityConfig {
 		this.refreshTokenService = refreshTokenService;
 	}
 
+	@Value("${frontEndBaseUrl}")
+	private String frontEndBaseUrl;
+	@Bean
+	public CorsConfigurationSource corsConfigurationSource() {
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		CorsConfiguration config = new CorsConfiguration();
+		config.setAllowCredentials(true);
+		config.addAllowedOrigin(frontEndBaseUrl);
+		config.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept"));
+		config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
+		config.setMaxAge(3600L);
+		source.registerCorsConfiguration("/**", config);
+		return source;
+	}
+
 	@Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(request -> request
+        http
+				.csrf(AbstractHttpConfigurer::disable)
+				.cors(cors -> cors.configurationSource(corsConfigurationSource()))
+				.authorizeHttpRequests(request -> request
                                         .requestMatchers("/admin/**").hasRole(Role.ADMIN.name())
-                                        .requestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**")).permitAll()
-                                        .requestMatchers("/products").authenticated()
                                         .requestMatchers("/success").authenticated()
                                         .requestMatchers("/signin").permitAll()
                                         .anyRequest().permitAll()
@@ -75,11 +96,11 @@ public class SecurityConfig {
 		        	.loginPage("/signin")
 		        	.usernameParameter("email")
 		        	.successHandler(new AuthenticationSuccessHandler() {
-						
+
 						@Override
 						public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 								Authentication authentication) throws IOException, ServletException {
-							
+
 							//HttpServletResponseWrapper ensures that the cookie is set only when the authentication is successful
 							response = new HttpServletResponseWrapper(response);
 							User user = (User) authentication.getPrincipal();
@@ -88,35 +109,20 @@ public class SecurityConfig {
 
 					    	Cookie accessTokenCookie = CookieUtils.createAccessTokenCookie(accessToken);
 					    	Cookie refreshTokenCookie = CookieUtils.createRefreshTokenCookie(refreshToken.getToken());
-					    	
-							logger.info("Successful authentication for: " + user.getUsername());
-							logger.info("Access Cookie: " + accessTokenCookie.getValue());
-							logger.info("Refresh Cookie: " + refreshTokenCookie.getValue());
-					    	logger.info("Role for " + user.getUsername() + " is: " + user.authority(accessToken).toString());
-							logger.info("Successful authentication for: " + user.getUsername());
-							logger.info("Access Cookie: " + accessTokenCookie.getValue());
-							logger.info("Refresh Cookie: " + refreshTokenCookie.getValue());
-					    	logger.info("Role for " + user.getUsername() + " is: " + user.authority(accessToken).toString());
-//					    	
+
 					    	response.addCookie(accessTokenCookie);
 							response.addCookie(refreshTokenCookie);
-					    	response.sendRedirect("/success");
+					    	response.sendRedirect("/admin/dashboard");
 						}
 					})
 		        	.failureHandler(new AuthenticationFailureHandler() {
-						
+
 						@Override
 						public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
 								AuthenticationException exception) throws IOException, ServletException {
 
 							String email = request.getParameter("email");
 							String password = request.getParameter("password");
-							
-							logger.error("Authentication failed for email: " + email);
-							logger.error("Authentication failed: " + exception.getMessage(), exception);
-							logger.info("Raw password during login: " + password);
-					        logger.info("Encoded password during login: " + passwordEncoder().encode(password));
-							
 							response.sendRedirect("/error");
 						}
 					})
@@ -126,7 +132,7 @@ public class SecurityConfig {
                 	.logoutUrl("/logout")
                 	.logoutSuccessUrl("/signin")
                 	// delete cookies from client after logout
-                	.deleteCookies("accessToken") 
+                	.deleteCookies("accessToken")
                 	.deleteCookies("refreshToken")
                 	.deleteCookies("JSESSIONID")
                 	.invalidateHttpSession(true)
@@ -143,13 +149,10 @@ public class SecurityConfig {
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        
         UserDetailsService userDetailsService = userService.userDetailsService();
         PasswordEncoder passwordEncoder = passwordEncoder();
-        
         authProvider.setUserDetailsService(userService.userDetailsService());
         authProvider.setPasswordEncoder(passwordEncoder());
-        
         logger.info("UserDetailsService: " + userDetailsService);
         logger.info("PasswordEncoder: " + passwordEncoder);
         

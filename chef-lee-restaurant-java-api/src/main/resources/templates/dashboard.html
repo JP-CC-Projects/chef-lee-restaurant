@@ -3,126 +3,117 @@
 
 <head>
     <title>Admin Dashboard</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-
-        .container {
-            width: 80%;
-            margin: 0 auto;
-            margin-top: 50px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-
-        th {
-            background-color: #4CAF50;
-            color: white;
-        }
-
-        .elevate-button {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 14px;
-            cursor: pointer;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
 </head>
 
 <body>
 
+<header class="header">
+    <h1>Admin Dashboard</h1>
+    <form action="/logout" method="post" class="logout-form">
+        <button type="submit" class="elevate-button">Logout</button>
+    </form>
+</header>
 
-<h2>Dishes</h2>
+    <h2>Add New Dish</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Dish Name</th>
+                <th id="priceHeader">Price</th>
+                <th>Description</th>
+                <th>Category</th>
+                <th>Update</th>
+            </tr>
+        </thead>
+        <tbody>
+            <form id="createDishForm" action="/admin/createDish" method="post">
+                <tr>
+                    <td><input type="text" id="newDishName" name="name" placeholder="Name" required></td>
+                    <td><input type="text" id="newDishPrice" name="price" placeholder="Price" required></td>
+                    <td><input type="text" id="newDishDescription" name="description" placeholder="Description"></td>
+                    <td>
+                        <select id="newDishCategory" name="category" required>
+                            <option value=null></option>
+                            <option value="LUNCH_SPECIAL">Lunch Special</option>
+                            <option value="APPETIZER">Appetizer</option>
+                            <option value="SOUP">Soup</option>
+                            <option value="CHEF_SUGGESTION">Chef Suggestion</option>
+                            <option value="NOODLES_AND_RICE">Noodles and Rice</option>
+                        </select>
+                    </td>
+                    <td><button type="submit" class="elevate-button">Add Dish</button></td>
+                </tr>
+            </form>
+        </tbody>
+    </table>
 
-<table id="dishesTable">
-    <thead>
-    <tr>
-        <th>Dish Name</th>
-        <th>Price</th>
-        <th>Category</th>
-        <th>Update</th>
-    </tr>
-    </thead>
-    <tbody>
-    <!-- Rows will be filled with JavaScript -->
-    </tbody>
-</table>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const dishes = [
-            // This data would ideally come from your server
-            {id: 1, name: 'Dish 1', price: '10.99', category: 'LUNCH_SPECIAL'},
-            {id: 2, name: 'Dish 2', price: '12.99', category: 'APPETIZER'}
-            // Add more dishes as needed
-        ];
-
-        const categories = ['LUNCH_SPECIAL', 'APPETIZER', 'SOUP', 'CHEF_SUGGESTION', 'NOODLES_AND_RICE'];
-
-        const tbody = document.querySelector('#dishesTable tbody');
-
-        dishes.forEach(dish => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
+    <h2>Dishes</h2>
+    <table id="dishesTable">
+        <thead>
+            <tr>
+                <th>Dish Name</th>
+                <th id="priceHeader">Price</th>
+                <th>Description</th>
+                <th>Category</th>
+                <th>Update</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Rows will be filled with JavaScript -->
+        </tbody>
+    </table>
+    <script th:inline="javascript">
+        document.addEventListener('DOMContentLoaded', function () {
+            /*<![CDATA[*/
+            const dishes = /*[[${allDishes}]]*/[];
+            /*]]>*/
+            const categories = ['LUNCH_SPECIAL', 'APPETIZER', 'SOUP', 'CHEF_SUGGESTION', 'NOODLES_AND_RICE'];
+            const tbody = document.querySelector('#dishesTable tbody');
+            dishes.forEach(dish => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
             <td><input type="text" value="${dish.name}" class="name" /></td>
             <td><input type="text" value="${dish.price}" class="price" /></td>
+            <td><input type="text" value="${dish.description}" class="description" /></td>
             <td>
                 <select class="category">
+                    <option value="" ${!dish.category ? 'selected' : ''}>Select a category</option>
                     ${categories.map(category => `<option value="${category}" ${dish.category === category ? 'selected' : ''}>${category}</option>`).join('')}
                 </select>
             </td>
-            <td><button class="updateBtn" data-id="${dish.id}">Update</button></td>
+            <td><button class="elevate-button" data-id="${dish.id}">Update</button></td>
         `;
-            tbody.appendChild(tr);
-        });
+                tbody.appendChild(tr);
+            });
 
-        document.querySelectorAll('.updateBtn').forEach(button => {
-            button.addEventListener('click', function () {
-                const id = this.getAttribute('data-id');
-                const tr = this.closest('tr');
-                const name = tr.querySelector('.name').value;
-                const price = tr.querySelector('.price').value;
-                const category = tr.querySelector('.category').value;
+            document.querySelectorAll('.updateBtn').forEach(button => {
+                button.addEventListener('click', function () {
+                    const id = this.getAttribute('data-id');
+                    const tr = this.closest('tr');
+                    const name = tr.querySelector('.name').value;
+                    const price = tr.querySelector('.price').value;
+                    const description = tr.querySelector('.description').value;
+                    const category = tr.querySelector('.category').value;
 
-                // Example AJAX request with Fetch API
-                fetch('/updateDish', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        // Add any other headers your API requires
-                    },
-                    body: JSON.stringify({id, name, price, category})
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log('Success:', data);
-                        // Handle success response
+                    // Example AJAX request with Fetch API
+                    fetch('/admin/updateDish', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ id, name, price, description, category })
                     })
-                    .catch((error) => {
-                        console.error('Error:', error);
-                        // Handle errors
-                    });
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log('Success:', data);
+                        })
+                        .catch((error) => {
+                            console.error('Error:', error);
+                        });
+                });
             });
         });
-    });
-</script>
-
-
+    </script>
 </body>
-
 </html>

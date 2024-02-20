@@ -8,13 +8,16 @@ import com.jpcc.chefleerestaurantjavaapi.service.DishService;
 import com.jpcc.chefleerestaurantjavaapi.service.UserService;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Collections;
 import java.util.List;
@@ -75,20 +78,26 @@ public class AdminController {
     }
 
     @PostMapping("/updateDish")
-    public String updateDish(Dish updatedDish) {
+    public ResponseEntity<?> updateDish(@RequestBody Dish updatedDish) {
         dishService.updateDish(updatedDish);
-        return "redirect:/";
+        return ResponseEntity.ok().body("Dish updated successfully");
     }
     @PostMapping("/createDish")
-    public String createDish(Dish newDish) {
+    public String createDish(Dish newDish,
+                             RedirectAttributes redirectAttributes) {
         dishService.saveDish(newDish);
-        return "redirect:/";
+        redirectAttributes.addFlashAttribute("message", "Dish added successfully!");
+        return "redirect:/admin/dashboard";
     }
-
+    @PostMapping("/deleteDish")
+    public ResponseEntity<?> deleteDish(@RequestBody Dish dishToDelete) {
+        dishService.deleteDish(dishToDelete);
+        return ResponseEntity.ok().body("Dish deleted successfully");
+    }
     @GetMapping("/dashboard")
     public String getDashboard (ModelMap model) {
-        List<User> users = userService.findAll();
-        model.addAttribute("userList", users);
+        List<Dish> allDishes = dishService.getAllDishes();
+        model.put("allDishes", allDishes);
         return "dashboard";
     }
 }

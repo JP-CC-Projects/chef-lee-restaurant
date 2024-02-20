@@ -14,7 +14,6 @@ public class Dish {
     private BigDecimal price;
     @Enumerated(EnumType.STRING) // This tells JPA to store the enum as a string in the database
     private DishCategory category;
-
     private Boolean isSpicy;
     private Boolean isPescatarian;
     private Boolean isVegetarian;
@@ -144,5 +143,13 @@ public class Dish {
 
     public void setHasWheat(Boolean hasWheat) {
         this.hasWheat = hasWheat;
+    }
+
+    public DishCategory getCategory() {
+        return category;
+    }
+
+    public void setCategory(DishCategory category) {
+        this.category = category;
     }
 }
