@@ -8,7 +8,7 @@
 
 .parallax {
   /* Adjust the height as needed */
-  width: 100vw;
+  width: auto;
   background-attachment: fixed;
   background-position: center center; /* Centers the background image */
   background-repeat: no-repeat;
