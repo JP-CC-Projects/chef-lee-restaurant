@@ -3,13 +3,14 @@
 .parallax-container {
   overflow-x: hidden;
   overflow-y: auto;
+  position: relative; /* Ensure it's positioned relative for absolute positioning within */
 }
 
 .parallax {
   /* Adjust the height as needed */
   width: 100vw;
   background-attachment: fixed;
-  background-position: center;
+  background-position: center center; /* Centers the background image */
   background-repeat: no-repeat;
   background-size: 100% auto; /* Ensure entire width of image is displayed */
 }
@@ -17,6 +18,8 @@
 #top-parallax-image {
   background-image: url('../../../assets/bar.webp');
   height: 80vh;
+  position: relative;
+  background-size: cover;
 }
 
 #bottom-parallax-image {
@@ -39,4 +42,12 @@
   height: 3px;
   background-color: black;
   margin: 20px 0;
+}
+.transparent-logo {
+  position: absolute;
+  top: 50%; 
+  left: 50%;
+  transform: translate(-50%, -50%); /* Adjust for the logo's dimensions to truly center it */
+  max-width: 40vw; /* Adjust based on desired size */
+  height: auto;
 }

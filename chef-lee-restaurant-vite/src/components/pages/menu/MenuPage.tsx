@@ -39,25 +39,25 @@ const MenuPage = () => {
   const vegetables = dishes.filter(dish => dish.category === 'VEGETABLE');
   const desserts = dishes.filter(dish => dish.category === 'DESSERT');
 
-
   const renderDishList = (dishList: Dish[]) => (
     <ul className="menu-grid">
       {dishList.map((dish) => (
-        <div className="menu-item" key={dish.id}>
-          <li>
-            <strong>{dish.name}</strong>
-            <br />
-            {dish.description}
-            <br />
-            Price: ${dish.price !== null && dish.price !== undefined ? dish.price.toFixed(2) : 'N/A'}
-            <br />
-            {getSpecialNotes(dish)}
-          </li>
-        </div>
+        <li className="menu-item" key={dish.id}>
+          <div className="dish-header">
+            <span className="dish-name"><strong>{dish.name}</strong></span>
+            <span className="dish-price">
+              ${dish.price !== null && dish.price !== undefined ? 
+                Number.isInteger(dish.price) ? dish.price : dish.price.toFixed(2)
+                : 'N/A'}
+            </span>
+          </div>
+          <p className="dish-description">{dish.description}</p>
+          <p>{getSpecialNotes(dish)}</p>
+        </li>
       ))}
     </ul>
   );
-  // <g fill="none"><circle fill="#c4270e" cx="12" cy="12" r="12"></circle>
+  
 
   const getSpecialNotes = (dish: Dish) => {
     let notes = [];
@@ -81,8 +81,8 @@ const MenuPage = () => {
           <h2 className="menu-section-title">Lunch Specials</h2>
           <hr />
           <p className="menu-section-text">Served daily from 11:30am to 2:30pm.
-          Each meal comes with fried rice and a choice of egg roll or soup.
-          Soup options are wonton soup, hot & sour soup, or egg drop soup.</p>
+            Each meal comes with fried rice and a choice of egg roll or soup.
+            Soup options are wonton soup, hot & sour soup, or egg drop soup.</p>
 
           {renderDishList(lunchSpecials)}
         </section>

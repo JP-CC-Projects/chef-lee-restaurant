@@ -1,19 +1,44 @@
-/* StoreHoursComponent.css */
 .flex-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  padding: 40px;
+  background-color:rgba(65, 65, 65, 0.5); /* Light background to enhance readability */
+  align-items: center; 
+}
+
+.store-hours h2 {
+  color: rgb(255, 255, 255); /* Darker color for better contrast */
+  margin-bottom: 16px; /* More space below the heading */
+  font-size: 1.5rem; /* Larger font size */
+  font-weight: 600; /* Medium font weight */
+}
+.store-hours p{
+  color: rgb(255, 255, 255);
+}
+
+.store-hours {
+  display: flex; /* Use flexbox layout */
+  flex-direction: column; /* Stack children vertically */
+  justify-content: center; /* Center content vertically */
+  padding: 20px;
+  background-color: rgb(40, 40, 40); /* Existing styles */
+  border-radius: 8px;
+  height: 100%; /* Ensure it fills the container */
+  /* Existing color, margin, and font styles */
+}
+
+
+.food-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 8px; /* Rounded corners for the image */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .flex-container {
+    grid-template-columns: 1fr; /* Stack elements on smaller screens */
   }
-  
-  .store-hours, .store-image {
-    flex: 1; /* Each child takes up an equal amount of space */
-    padding: 20px;
-  }
-  
-  .food-image img {
-    width: 100%; /* Make image fully responsive within its container */
-    height: auto;
-    display: block; /* Removes bottom margin/padding */
-  }
-  
+}

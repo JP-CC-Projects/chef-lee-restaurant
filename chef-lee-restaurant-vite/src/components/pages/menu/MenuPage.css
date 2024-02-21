@@ -7,9 +7,24 @@
 }
 
 .menu-item {
-  background: #f0f0f0; /* Light grey background */
+  background: #FFFFFF; /* Light grey background */
   padding: 15px;
   border-radius: 5px;
+}
+
+.dish-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dish-name, .dish-price {
+  /* If you want each side to potentially take up equal space, you can uncomment the next line */
+  flex: 1;
+}
+
+.dish-description {
+  margin-top: 0.5em; /* Adjust as needed for spacing */
 }
 
 /* Media query for large screens */
@@ -21,6 +36,7 @@
 
 .menu-container {
   padding: 20px;
+  background-color: #FFFFFF;
 }
 
 .menu-title {

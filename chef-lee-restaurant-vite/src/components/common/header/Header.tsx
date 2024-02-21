@@ -1,4 +1,4 @@
-import './header.css'; // Assuming you have a CSS file for styling
+import './Header.css'; // Assuming you have a CSS file for styling
 import logo from '../../../assets/cheflee_logo.webp'; // Adjust the path as necessary
 
 const Header = () => {

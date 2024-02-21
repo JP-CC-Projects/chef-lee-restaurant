@@ -6,8 +6,7 @@
     z-index: 1000; /* Ensure the header is above other content */
     background-color: #000000; /* Consider a solid color for better visibility */
     padding: 10px 0;
-    box-shadow: 0 2px 4px rgba(80, 80, 80, 0.1);
-}
+    box-shadow: 0 10px 60px rgba(255, 215, 0, 0.1)}
 
 .navbar {
     display: flex;
