@@ -1,4 +1,5 @@
 package com.jpcc.chefleerestaurantjavaapi.controller;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jpcc.chefleerestaurantjavaapi.domain.Authority;
 import com.jpcc.chefleerestaurantjavaapi.domain.Dish;
 import com.jpcc.chefleerestaurantjavaapi.domain.DishCategory;
@@ -29,13 +30,16 @@ public class AdminController {
     private UserService userService;
     private UserRepository userRepository;
     private PasswordEncoder passwordEncoder;
+    private final ObjectMapper objectMapper;
 
 
-    public AdminController(DishService dishService, UserService userService, UserRepository userRepository, PasswordEncoder passwordEncoder) {
+
+    public AdminController(DishService dishService, UserService userService, UserRepository userRepository, PasswordEncoder passwordEncoder, ObjectMapper objectMapper) {
         this.dishService = dishService;
         this.userService = userService;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.objectMapper = objectMapper;
     }
 
     @Value("${admin.firstName}")
@@ -79,6 +83,15 @@ public class AdminController {
 
     @PostMapping("/updateDish")
     public ResponseEntity<?> updateDish(@RequestBody Dish updatedDish) {
+        try {
+            // Convert the Dish object to a JSON string
+            String json = objectMapper.writeValueAsString(updatedDish);
+            System.out.println("Received Dish object as JSON: " + json);
+        } catch (Exception e) {
+            // Handle the case where the object cannot be converted to JSON
+            System.out.println("Error converting Dish object to JSON: " + e.getMessage());
+        }
+
         dishService.updateDish(updatedDish);
         return ResponseEntity.ok().body("Dish updated successfully");
     }

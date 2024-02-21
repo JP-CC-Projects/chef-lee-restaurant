@@ -23,7 +23,14 @@ export enum DishCategory {
     SOUP = "SOUP",
     CHEF_SUGGESTION = "CHEF_SUGGESTION",
     NOODLES_AND_RICE = "NOODLES_AND_RICE",
+    CHICKEN = "CHICKEN",
+    PORK = "PORK",
+    BEEF = "BEEF",
+    SEAFOOD = "SEAFOOD",
+    VEGETABLE = "VEGETABLE",
+    DESSERT = "DESSERT",
 }
+
 
 export const DishCategoryDisplayName: { [key in DishCategory]: string } = {
     [DishCategory.LUNCH_SPECIAL]: "Lunch Special",
@@ -31,5 +38,12 @@ export const DishCategoryDisplayName: { [key in DishCategory]: string } = {
     [DishCategory.SOUP]: "Soup",
     [DishCategory.CHEF_SUGGESTION]: "Chef's Suggestion",
     [DishCategory.NOODLES_AND_RICE]: "Noodles and Rice",
+    [DishCategory.CHICKEN]: "Chicken",
+    [DishCategory.PORK]: "Pork",
+    [DishCategory.BEEF]: "Beef",
+    [DishCategory.SEAFOOD]: "Seafood",
+    [DishCategory.VEGETABLE]: "Vegetable",
+    [DishCategory.DESSERT]: "Dessert",
 };
+
 

@@ -15,105 +15,204 @@
     </form>
 </header>
 
-    <h2>Add New Dish</h2>
+<h2>Add New Dish</h2>
+<form id="createDishForm" action="/admin/createDish" method="post">
     <table>
         <thead>
-            <tr>
-                <th>Dish Name</th>
-                <th id="priceHeader">Price</th>
-                <th>Description</th>
-                <th>Category</th>
-                <th>Update</th>
-            </tr>
+        <tr>
+            <th>Dish Name</th>
+            <th class="priceHeader">Price</th>
+            <th>Description</th>
+            <th>Category</th>
+            <th>On Menu</th>
+            <th>Spicy</th>
+            <th>Vegetarian</th>
+            <th>Add Dish</th>
+        </tr>
         </thead>
         <tbody>
-            <form id="createDishForm" action="/admin/createDish" method="post">
-                <tr>
-                    <td><input type="text" id="newDishName" name="name" placeholder="Name" required></td>
-                    <td><input type="text" id="newDishPrice" name="price" placeholder="Price" required></td>
-                    <td><input type="text" id="newDishDescription" name="description" placeholder="Description"></td>
-                    <td>
-                        <select id="newDishCategory" name="category" required>
-                            <option value=null></option>
-                            <option value="LUNCH_SPECIAL">Lunch Special</option>
-                            <option value="APPETIZER">Appetizer</option>
-                            <option value="SOUP">Soup</option>
-                            <option value="CHEF_SUGGESTION">Chef Suggestion</option>
-                            <option value="NOODLES_AND_RICE">Noodles and Rice</option>
-                        </select>
-                    </td>
-                    <td><button type="submit" class="elevate-button">Add Dish</button></td>
-                </tr>
-            </form>
-        </tbody>
-    </table>
-
-    <h2>Dishes</h2>
-    <table id="dishesTable">
-        <thead>
-            <tr>
-                <th>Dish Name</th>
-                <th id="priceHeader">Price</th>
-                <th>Description</th>
-                <th>Category</th>
-                <th>Update</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Rows will be filled with JavaScript -->
-        </tbody>
-    </table>
-    <script th:inline="javascript">
-        document.addEventListener('DOMContentLoaded', function () {
-            /*<![CDATA[*/
-            const dishes = /*[[${allDishes}]]*/[];
-            /*]]>*/
-            const categories = ['LUNCH_SPECIAL', 'APPETIZER', 'SOUP', 'CHEF_SUGGESTION', 'NOODLES_AND_RICE'];
-            const tbody = document.querySelector('#dishesTable tbody');
-            dishes.forEach(dish => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-            <td><input type="text" value="${dish.name}" class="name" /></td>
-            <td><input type="text" value="${dish.price}" class="price" /></td>
-            <td><input type="text" value="${dish.description}" class="description" /></td>
+        <tr>
+            <td><input type="text" id="newDishName" name="name" placeholder="Name" required></td>
+            <td><input type="text" id="newDishPrice" name="price" placeholder="Price" required></td>
+            <td><input type="text" id="newDishDescription" name="description" placeholder="Description"></td>
             <td>
-                <select class="category">
-                    <option value="" ${!dish.category ? 'selected' : ''}>Select a category</option>
-                    ${categories.map(category => `<option value="${category}" ${dish.category === category ? 'selected' : ''}>${category}</option>`).join('')}
+                <select id="newDishCategory" name="category" required>
+                    <option value=""></option>
+                    <option value="LUNCH_SPECIAL">Lunch Special</option>
+                    <option value="APPETIZER">Appetizer</option>
+                    <option value="SOUP">Soup</option>
+                    <option value="CHEF_SUGGESTION">Chef's Suggestion</option>
+                    <option value="NOODLES_AND_RICE">Noodles and Rice</option>
+                    <option value="CHICKEN">Chicken</option>
+                    <option value="PORK">Pork</option>
+                    <option value="BEEF">Beef</option>
+                    <option value="SEAFOOD">Seafood</option>
+                    <option value="VEGETABLE">Vegetable</option>
+                    <option value="DESSERT">Dessert</option>
                 </select>
+
             </td>
-            <td><button class="elevate-button" data-id="${dish.id}">Update</button></td>
-        `;
-                tbody.appendChild(tr);
-            });
+            <!-- For boolean values, ensure a hidden input for false value -->
+            <td class="center-content">
+                <input type="hidden" name="currentlyOnMenu" value="false">
+                <input type="checkbox" name="currentlyOnMenu" value="true">
+            </td>
+            <td class="center-content">
+                <input type="hidden" name="isSpicy" value="false">
+                <input type="checkbox" name="isSpicy" value="true">
+            </td>
+            <td class="center-content">
+                <input type="hidden" name="isVegetarian" value="false">
+                <input type="checkbox" name="isVegetarian" value="true">
+            </td>
+            <td class="center-content">
+                <button type="submit" class="elevate-button">Add Dish</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</form>
 
-            document.querySelectorAll('.updateBtn').forEach(button => {
-                button.addEventListener('click', function () {
-                    const id = this.getAttribute('data-id');
-                    const tr = this.closest('tr');
-                    const name = tr.querySelector('.name').value;
-                    const price = tr.querySelector('.price').value;
-                    const description = tr.querySelector('.description').value;
-                    const category = tr.querySelector('.category').value;
+<h2>Dishes</h2>
+<table id="dishesTable">
+    <thead>
+    <tr>
+        <th onclick="sortTable(0)">Dish Name</th>
+        <th onclick="sortTable(1)" class="priceHeader">Price</th>
+        <th onclick="sortTable(2)">Description</th>
+        <th onclick="sortTable(3)">Category</th>
+        <th onclick="sortTable(4)">On Menu</th>
+        <th onclick="sortTable(5)">Spicy</th>
+        <th onclick="sortTable(6)">Vegetarian</th>
+        <th>Update</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- Rows will be filled with JavaScript -->
+    </tbody>
+</table>
+<script th:inline="javascript">
+    document.addEventListener('DOMContentLoaded', function () {
+        const dishes = /*[[${allDishes}]]*/[];
+        const categories = [
+            'LUNCH_SPECIAL',
+            'APPETIZER',
+            'SOUP',
+            'CHEF_SUGGESTION',
+            'NOODLES_AND_RICE',
+            'CHICKEN',
+            'PORK',
+            'BEEF',
+            'SEAFOOD',
+            'VEGETABLE',
+            'DESSERT'
+        ];
+        const tbody = document.querySelector('#dishesTable tbody');
+        dishes.forEach(dish => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td><input type="text" value="${dish.name}" class="name" /></td>
+                <td><input type="text" value="${dish.price}" class="price" /></td>
+                <td><input type="text" value="${dish.description}" class="description" /></td>
+                <td>
+                    <select class="category">
+                        <option value="" ${!dish.category ? 'selected' : ''}>Select a category</option>
+                        ${categories.map(category => `<option value="${category}" ${dish.category === category ? 'selected' : ''}>${category}</option>`).join('')}
+                    </select>
+                </td>
+                <td class="center-content"><input type="checkbox" class="currentlyOnMenu" ${dish.currentlyOnMenu ? 'checked' : ''}></td>
+                <td class="center-content"><input type="checkbox" class="isSpicy" ${dish.isSpicy ? 'checked' : ''}></td>
+                <td class="center-content"><input type="checkbox" class="isVegetarian" ${dish.isVegetarian ? 'checked' : ''}></td>
+                <td class="center-content"><button class="updateBtn elevate-button" data-id="${dish.id}">Update</button></td>`;
+            tbody.appendChild(tr);
+        });
 
-                    // Example AJAX request with Fetch API
-                    fetch('/admin/updateDish', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ id, name, price, description, category })
+        document.querySelectorAll('.updateBtn').forEach(button => {
+            button.addEventListener('click', function () {
+                const id = this.getAttribute('data-id');
+                const tr = this.closest('tr');
+                const name = tr.querySelector('.name').value;
+                const price = tr.querySelector('.price').value;
+                const description = tr.querySelector('.description').value;
+                const category = tr.querySelector('.category').value;
+                const currentlyOnMenu = tr.querySelector('.currentlyOnMenu').checked;
+                const isSpicy = tr.querySelector('.isSpicy').checked;
+                const isVegetarian = tr.querySelector('.isVegetarian').checked;
+
+                fetch('/admin/updateDish', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        id,
+                        name,
+                        price,
+                        description,
+                        category,
+                        currentlyOnMenu,
+                        isSpicy,
+                        isVegetarian
                     })
-                        .then(response => response.json())
-                        .then(data => {
-                            console.log('Success:', data);
-                        })
-                        .catch((error) => {
-                            console.error('Error:', error);
-                        });
-                });
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Success:', data);
+                        // Consider adding UI feedback here, such as a success message or updating the table to reflect changes.
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                        // Consider adding UI feedback here, such as displaying the error message.
+                    });
             });
         });
-    </script>
+    });
+</script>
+<script>
+    // Object to keep track of the sort orders for each column, initializing as ascending
+    var sortOrders = {};
+
+    function sortTable(columnIndex) {
+        var table = document.getElementById("dishesTable");
+        var rows, switching, i, x, y, shouldSwitch, switchcount = 0;
+        switching = true;
+        // Toggle the direction of sorting
+        var dir = sortOrders[columnIndex] || "asc"; // Default to ascending
+
+        while (switching) {
+            switching = false;
+            rows = table.getElementsByTagName("TR");
+            for (i = 1; i < (rows.length - 1); i++) {
+                shouldSwitch = false;
+                x = rows[i].getElementsByTagName("TD")[columnIndex];
+                y = rows[i + 1].getElementsByTagName("TD")[columnIndex];
+                if (dir === "asc") {
+                    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                } else if (dir === "desc") {
+                    if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+            }
+            if (shouldSwitch) {
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+                switchcount++;
+            } else {
+                if (switchcount === 0 && dir === "asc") {
+                    dir = "desc";
+                    switching = true;
+                }
+            }
+        }
+        // Toggle the direction for the next click
+        sortOrders[columnIndex] = dir === "asc" ? "desc" : "asc";
+    }
+</script>
+
 </body>
 </html>

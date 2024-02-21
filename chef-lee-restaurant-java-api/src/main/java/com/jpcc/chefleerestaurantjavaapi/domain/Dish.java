@@ -1,4 +1,5 @@
 package com.jpcc.chefleerestaurantjavaapi.domain;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 
@@ -15,8 +16,8 @@ public class Dish {
     @Enumerated(EnumType.STRING) // This tells JPA to store the enum as a string in the database
     private DishCategory category;
     private Boolean isSpicy;
-    private Boolean isPescatarian;
     private Boolean isVegetarian;
+    private Boolean isPescatarian;
     private Boolean hasTreeNuts;
     private Boolean hasPeanuts;
     private Boolean hasEggs;
@@ -65,14 +66,15 @@ public class Dish {
         this.price = price;
     }
 
+    @JsonProperty("isSpicy")
     public Boolean getSpicy() {
         return isSpicy;
     }
 
-    public void setSpicy(Boolean spicy) {
-        isSpicy = spicy;
+    @JsonProperty("isSpicy")
+    public void setSpicy(Boolean isSpicy) {
+        this.isSpicy = isSpicy;
     }
-
     public Boolean getPescatarian() {
         return isPescatarian;
     }
@@ -81,9 +83,11 @@ public class Dish {
         isPescatarian = pescatarian;
     }
 
+    @JsonProperty("isVegetarian")
     public Boolean getVegetarian() {
         return isVegetarian;
     }
+    @JsonProperty("isVegetarian")
 
     public void setVegetarian(Boolean vegetarian) {
         isVegetarian = vegetarian;
@@ -152,4 +156,5 @@ public class Dish {
     public void setCategory(DishCategory category) {
         this.category = category;
     }
+
 }

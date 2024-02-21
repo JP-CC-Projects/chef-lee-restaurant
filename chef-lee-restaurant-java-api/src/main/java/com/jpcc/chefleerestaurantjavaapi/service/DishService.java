@@ -34,7 +34,8 @@ public class DishService {
         System.out.println(updatedDish.getId());
         if (dishRepository.existsById(updatedDish.getId())){
             dishRepository.save(updatedDish);
-            System.out.println(updatedDish);
+            System.out.println("Dish updated: " + updatedDish.getName());
+            System.out.println(updatedDish.getSpicy());
             return true;
         }
         return false;

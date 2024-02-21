@@ -25,10 +25,16 @@ table {
     margin-top: 20px;
 }
 
-th, td {
+td {
     border: 1px solid #ddd;
     padding: 8px;
     text-align: left;
+}
+th{
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+    vertical-align: middle;
 }
 
 th {
@@ -49,10 +55,12 @@ th {
 }
 
 input[type="text"], select {
+    width: 100%; /* Make element fill the cell */
     padding: 4px;
-    margin-right: 4px;
-    width: auto; /* Adjust width as needed */
+    margin: 0; /* Remove margin to ensure full width usage */
+    box-sizing: border-box; /* Include padding and border in the element's total width */
 }
+
 
 form#createDishForm td {
     padding: 4px;
@@ -61,9 +69,17 @@ form#createDishForm td {
 button[type="submit"] {
     cursor: pointer;
 }
-#priceHeader {
+.priceHeader {
     width: 4rem;
 }
 table input.price {
     width: 4rem;
+}
+input[type="checkbox"] {
+    transform: scale(2.5); /* Adjust the scale factor as needed */
+    margin: 3px; /* Optional: add some margin for better spacing */
+}
+.center-content {
+    text-align: center;
+    vertical-align: middle;
 }

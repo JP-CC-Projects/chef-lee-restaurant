@@ -1,21 +1,49 @@
 .menu-grid {
-    display: grid;
-    grid-template-columns: 1fr; /* Default to single column */
-    gap: 20px;
-    padding: 0;
-    list-style: none;
+  display: grid;
+  grid-template-columns: 1fr; /* Default to single column */
+  gap: 20px;
+  padding: 0;
+  list-style: none;
+}
+
+.menu-item {
+  background: #f0f0f0; /* Light grey background */
+  padding: 15px;
+  border-radius: 5px;
+}
+
+/* Media query for large screens */
+@media (min-width: 600px) {
+  .menu-grid {
+    grid-template-columns: repeat(2, 1fr); /* 2 columns on large screens */
   }
-  
-  .menu-item {
-    background: #f0f0f0; /* Light grey background */
-    padding: 15px;
-    border-radius: 5px;
-  }
-  
-  /* Media query for large screens */
-  @media (min-width: 768px) {
-    .menu-grid {
-      grid-template-columns: repeat(2, 1fr); /* 2 columns on large screens */
-    }
-  }
-  
+}
+
+.menu-container {
+  padding: 20px;
+}
+
+.menu-title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 1.25rem; /* Converted 20px to rem */
+}
+
+.menu-error {
+  color: red;
+  margin-bottom: 0.625rem; 
+}
+
+.menu-section {
+  margin-bottom: 1.875rem;
+}
+
+.menu-section-title {
+  font-size: 1.25rem; 
+  font-weight: bold;
+  margin-bottom: 0.625rem; 
+}
+
+.menu-section-text {
+  margin-bottom: 0.3125rem; 
+}

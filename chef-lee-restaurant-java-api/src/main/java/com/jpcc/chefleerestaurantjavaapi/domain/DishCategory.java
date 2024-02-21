@@ -5,7 +5,13 @@ public enum DishCategory {
     APPETIZER("Appetizer"),
     SOUP("Soup"),
     CHEF_SUGGESTION("Chef's Suggestion"),
-    NOODLES_AND_RICE("Noodles and Rice");
+    NOODLES_AND_RICE("Noodles and Rice"),
+    CHICKEN("Chicken"),
+    PORK("Pork"),
+    BEEF("Beef"),
+    SEAFOOD("Seafood"),
+    VEGETABLE("Vegetable"),
+    DESSERT("Dessert");
 
     private final String displayName;
 
