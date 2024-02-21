@@ -22,8 +22,9 @@ public class DishService {
         return dishRepository.findByCurrentlyOnMenu(true);
     }
     @Transactional
-    public void deleteDish(Dish dishToDelete){
-        dishRepository.delete(dishToDelete);
+    public void deleteDish(Long dishToDeleteId){
+        System.out.println(dishToDeleteId);
+        dishRepository.deleteById(dishToDeleteId);
     }
     @Transactional
     public void saveDish(Dish dishToSave){

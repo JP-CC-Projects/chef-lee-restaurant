@@ -14,14 +14,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/admin")
@@ -91,9 +89,8 @@ public class AdminController {
             // Handle the case where the object cannot be converted to JSON
             System.out.println("Error converting Dish object to JSON: " + e.getMessage());
         }
-
         dishService.updateDish(updatedDish);
-        return ResponseEntity.ok().body("Dish updated successfully");
+        return ResponseEntity.ok().body(Map.of("message", "Dish updated successfully"));
     }
     @PostMapping("/createDish")
     public String createDish(Dish newDish,
@@ -102,10 +99,11 @@ public class AdminController {
         redirectAttributes.addFlashAttribute("message", "Dish added successfully!");
         return "redirect:/admin/dashboard";
     }
-    @PostMapping("/deleteDish")
-    public ResponseEntity<?> deleteDish(@RequestBody Dish dishToDelete) {
-        dishService.deleteDish(dishToDelete);
-        return ResponseEntity.ok().body("Dish deleted successfully");
+    @PostMapping("/deleteDish/{dishId}")
+    public ResponseEntity<?> deleteDish(@PathVariable Long dishId) {
+        dishService.deleteDish(dishId);
+        // Return a JSON response
+        return ResponseEntity.ok().body(Map.of("message", "Dish deleted successfully"));
     }
     @GetMapping("/dashboard")
     public String getDashboard (ModelMap model) {

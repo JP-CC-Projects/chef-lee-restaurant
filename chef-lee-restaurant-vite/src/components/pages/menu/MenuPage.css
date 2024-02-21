@@ -20,7 +20,7 @@
 
 .dish-name, .dish-price {
   /* If you want each side to potentially take up equal space, you can uncomment the next line */
-  flex: 1;
+  /* flex: 1; */
 }
 
 .dish-description {
@@ -35,7 +35,7 @@
 }
 
 .menu-container {
-  padding: 20px;
+  padding: 20px 40px;
   background-color: #FFFFFF;
 }
 
