@@ -49,7 +49,6 @@ public class AuthenticationController {
     	model.addAttribute("loginError", true);
     	return "login";
     }
-    
 
     @PostMapping("/signin")
     public ResponseEntity<JwtAuthenticationResponse> signin(@RequestBody SignInRequest request, @RequestBody User user) {
@@ -58,12 +57,10 @@ public class AuthenticationController {
         return ResponseEntity.ok(authenticationService.signin(request));
 
     }
-    
-    
+
     @PostMapping("/refreshtoken")
     public ResponseEntity<?> refreshtoken(@RequestBody RefreshTokenRequest request) {
       String requestRefreshToken = request.refreshToken();
-
       return refreshTokenService.findByToken(requestRefreshToken)
           .map(refreshTokenService::verifyExpiration)
           .map(RefreshToken::getUser)

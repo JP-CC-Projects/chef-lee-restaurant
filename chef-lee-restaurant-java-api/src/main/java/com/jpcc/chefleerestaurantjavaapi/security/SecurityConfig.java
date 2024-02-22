@@ -54,107 +54,110 @@ public class SecurityConfig {
     private final JwtServiceImpl jwtService;
     private final RefreshTokenService refreshTokenService;
     private Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
-    
+
     public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter, UserServiceImpl userService,
-			JwtServiceImpl jwtService, RefreshTokenService refreshTokenService) {
-		super();
-		this.jwtAuthenticationFilter = jwtAuthenticationFilter;
-		this.userService = userService;
-		this.jwtService = jwtService;
-		this.refreshTokenService = refreshTokenService;
-	}
+                          JwtServiceImpl jwtService, RefreshTokenService refreshTokenService) {
+        super();
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+        this.userService = userService;
+        this.jwtService = jwtService;
+        this.refreshTokenService = refreshTokenService;
+    }
 
-	@Value("${frontEndBaseUrl}")
-	private String frontEndBaseUrl;
-	@Value("${backEndBaseUrl}")
-	private String backEndBaseUrl;
-	@Bean
-	public CorsConfigurationSource corsConfigurationSource() {
-		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    @Value("${frontEndBaseUrl}")
+    private String frontEndBaseUrl;
+    @Value("${backEndBaseUrl}")
+    private String backEndBaseUrl;
 
-		// Frontend CORS configuration
-		CorsConfiguration frontendConfig = new CorsConfiguration();
-		frontendConfig.setAllowCredentials(true);
-		frontendConfig.addAllowedOrigin(frontEndBaseUrl);
-		frontendConfig.setAllowedMethods(Collections.singletonList("GET")); // Restrict to GET for frontend
-		frontendConfig.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept"));
-		frontendConfig.setMaxAge(3600L);
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 
-		// Backend CORS configuration
-		CorsConfiguration backendConfig = new CorsConfiguration();
-		backendConfig.setAllowCredentials(true);
-		backendConfig.addAllowedOrigin(backEndBaseUrl);
-		backendConfig.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE")); // Allow all for backend
-		backendConfig.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept"));
-		backendConfig.setMaxAge(3600L);
+        // Frontend CORS configuration
+        CorsConfiguration frontendConfig = new CorsConfiguration();
+        frontendConfig.setAllowCredentials(true);
+        frontendConfig.addAllowedOrigin(frontEndBaseUrl);
+        frontendConfig.setAllowedMethods(Collections.singletonList("GET")); // Restrict to GET for frontend
+        frontendConfig.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept"));
+        frontendConfig.setMaxAge(3600L);
 
-		// Register configurations
-		source.registerCorsConfiguration("/api/**", frontendConfig); // Assuming frontend uses "/api/**"
-		source.registerCorsConfiguration("/**", backendConfig); // More permissive for backend
+        // Backend CORS configuration
+        CorsConfiguration backendConfig = new CorsConfiguration();
+        backendConfig.setAllowCredentials(true);
+        backendConfig.addAllowedOrigin(backEndBaseUrl);
+        backendConfig.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE")); // Allow all for backend
+        backendConfig.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept"));
+        backendConfig.setMaxAge(3600L);
 
-		return source;
-	}
+        // Register configurations
+        source.registerCorsConfiguration("/api/**", frontendConfig); // Assuming frontend uses "/api/**"
+        source.registerCorsConfiguration("/**", backendConfig); // More permissive for backend
+
+        return source;
+    }
 
 
-	@Bean
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
 //				.csrf(AbstractHttpConfigurer::disable)
-				.cors(cors -> cors.configurationSource(corsConfigurationSource()))
-				.authorizeHttpRequests(request -> request
-                                        .requestMatchers("/admin/**").hasRole(Role.ADMIN.name())
-                                        .requestMatchers("/success").authenticated()
-                                        .requestMatchers("/signin").permitAll()
-                                        .anyRequest().permitAll()
-                        )
-				.headers(headers -> headers.addHeaderWriter(new XFrameOptionsHeaderWriter(
-						XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN)))                .authenticationProvider(authenticationProvider())
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .authorizeHttpRequests(request -> request
+                        .requestMatchers("/admin/**").hasRole(Role.ADMIN.name())
+                        .requestMatchers("/success").authenticated()
+                        .requestMatchers("/signin").permitAll()
+                        .anyRequest().permitAll()
+                )
+                .headers(headers -> headers.addHeaderWriter(new XFrameOptionsHeaderWriter(
+                        XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN))).authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .formLogin(login -> {login
-		        	.loginPage("/signin")
-		        	.usernameParameter("email")
-		        	.successHandler(new AuthenticationSuccessHandler() {
+                .formLogin(login -> {
+                    login
+                            .loginPage("/signin")
+                            .usernameParameter("email")
+                            .successHandler(new AuthenticationSuccessHandler() {
 
-						@Override
-						public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-								Authentication authentication) throws IOException, ServletException {
+                                @Override
+                                public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
+                                                                    Authentication authentication) throws IOException, ServletException {
 
-							//HttpServletResponseWrapper ensures that the cookie is set only when the authentication is successful
-							response = new HttpServletResponseWrapper(response);
-							User user = (User) authentication.getPrincipal();
-					    	String accessToken = jwtService.generateToken(new HashMap<>(), user);
-					    	RefreshToken refreshToken = refreshTokenService.createRefreshToken(user.getId());
+                                    //HttpServletResponseWrapper ensures that the cookie is set only when the authentication is successful
+                                    response = new HttpServletResponseWrapper(response);
+                                    User user = (User) authentication.getPrincipal();
+                                    String accessToken = jwtService.generateToken(new HashMap<>(), user);
+                                    RefreshToken refreshToken = refreshTokenService.createRefreshToken(user.getId());
 
-					    	Cookie accessTokenCookie = CookieUtils.createAccessTokenCookie(accessToken);
-					    	Cookie refreshTokenCookie = CookieUtils.createRefreshTokenCookie(refreshToken.getToken());
+                                    Cookie accessTokenCookie = CookieUtils.createAccessTokenCookie(accessToken);
+                                    Cookie refreshTokenCookie = CookieUtils.createRefreshTokenCookie(refreshToken.getToken());
 
-					    	response.addCookie(accessTokenCookie);
-							response.addCookie(refreshTokenCookie);
-					    	response.sendRedirect("/admin/dashboard");
-						}
-					})
-		        	.failureHandler(new AuthenticationFailureHandler() {
+                                    response.addCookie(accessTokenCookie);
+                                    response.addCookie(refreshTokenCookie);
+                                    response.sendRedirect("/admin/dashboard");
+                                }
+                            })
+                            .failureHandler(new AuthenticationFailureHandler() {
 
-						@Override
-						public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
-								AuthenticationException exception) throws IOException, ServletException {
+                                @Override
+                                public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
+                                                                    AuthenticationException exception) throws IOException, ServletException {
 
-							String email = request.getParameter("email");
-							String password = request.getParameter("password");
-							response.sendRedirect("/error");
-						}
-					})
-		        	.permitAll();
-		        })
-                .logout(logoutConfigurer -> {logoutConfigurer
-                	.logoutUrl("/logout")
-                	.logoutSuccessUrl("/signin")
-                	// delete cookies from client after logout
-                	.deleteCookies("accessToken")
-                	.deleteCookies("refreshToken")
-                	.deleteCookies("JSESSIONID")
-                	.invalidateHttpSession(true)
-                	.clearAuthentication(true);
+                                    String email = request.getParameter("email");
+                                    String password = request.getParameter("password");
+                                    response.sendRedirect("/error");
+                                }
+                            })
+                            .permitAll();
+                })
+                .logout(logoutConfigurer -> {
+                    logoutConfigurer
+                            .logoutUrl("/logout")
+                            .logoutSuccessUrl("/signin")
+                            // delete cookies from client after logout
+                            .deleteCookies("accessToken")
+                            .deleteCookies("refreshToken")
+                            .deleteCookies("JSESSIONID")
+                            .invalidateHttpSession(true)
+                            .clearAuthentication(true);
                 });
         return http.build();
     }
@@ -173,7 +176,7 @@ public class SecurityConfig {
         authProvider.setPasswordEncoder(passwordEncoder());
         logger.info("UserDetailsService: " + userDetailsService);
         logger.info("PasswordEncoder: " + passwordEncoder);
-        
+
         return authProvider;
     }
 
