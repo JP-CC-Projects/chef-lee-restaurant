@@ -8,12 +8,15 @@ import com.jpcc.chefleerestaurantjavaapi.repository.UserRepository;
 import com.jpcc.chefleerestaurantjavaapi.service.DishService;
 import com.jpcc.chefleerestaurantjavaapi.service.UserService;
 import jakarta.annotation.PostConstruct;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -29,6 +32,7 @@ public class AdminController {
     private UserRepository userRepository;
     private PasswordEncoder passwordEncoder;
     private final ObjectMapper objectMapper;
+    private static final Logger logger = LoggerFactory.getLogger(AdminController.class);
 
 
 
@@ -94,7 +98,24 @@ public class AdminController {
     }
     @PostMapping("/createDish")
     public String createDish(Dish newDish,
+                             BindingResult result,
                              RedirectAttributes redirectAttributes) {
+        try {
+            // Convert the Dish object to a JSON string
+            String json = objectMapper.writeValueAsString(newDish);
+            System.out.println("Received Dish object as JSON: " + json);
+        } catch (Exception e) {
+            // Handle the case where the object cannot be converted to JSON
+            System.out.println("Error converting Dish object to JSON: " + e.getMessage());
+        }
+        if (result.hasErrors()) {
+            // Handle errors
+            // For example, add attributes to RedirectAttributes and return to the form page
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.newDish", result);
+            redirectAttributes.addFlashAttribute("newDish", newDish);
+
+            return "redirect:/admin/dashboard"; // Redirect back to the form page
+        }
         dishService.saveDish(newDish);
         redirectAttributes.addFlashAttribute("message", "Dish added successfully!");
         return "redirect:/admin/dashboard";
@@ -102,7 +123,6 @@ public class AdminController {
     @PostMapping("/deleteDish/{dishId}")
     public ResponseEntity<?> deleteDish(@PathVariable Long dishId) {
         dishService.deleteDish(dishId);
-        // Return a JSON response
         return ResponseEntity.ok().body(Map.of("message", "Dish deleted successfully"));
     }
     @GetMapping("/dashboard")

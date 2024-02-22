@@ -54,9 +54,7 @@ public class AuthenticationController {
     @PostMapping("/signin")
     public ResponseEntity<JwtAuthenticationResponse> signin(@RequestBody SignInRequest request, @RequestBody User user) {
     	Optional<User> existingUser = userService.findUserByEmail(user.getEmail());
-
     	String accessToken = jwtService.generateToken(user);
-    	
         return ResponseEntity.ok(authenticationService.signin(request));
 
     }

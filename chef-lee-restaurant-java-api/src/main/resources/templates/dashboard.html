@@ -16,7 +16,7 @@
 </header>
 
 <h2>Add New Dish</h2>
-<form id="createDishForm" action="/admin/createDish" method="post">
+<form id="createDishForm" action="/admin/createDish" method="post" th:action="@{/admin/createDish}">
     <table>
         <thead>
         <tr>
@@ -54,16 +54,16 @@
             </td>
             <!-- For boolean values, ensure a hidden input for false value -->
             <td class="center-content">
-                <input type="hidden" name="currentlyOnMenu" value="false">
                 <input type="checkbox" name="currentlyOnMenu" value="true">
+                <input type="hidden" name="currentlyOnMenu" value="false">
             </td>
             <td class="center-content">
-                <input type="hidden" name="isSpicy" value="false">
-                <input type="checkbox" name="isSpicy" value="true">
+                <input type="checkbox" name="spicy" value="true">
+                <input type="hidden" name="spicy" value="false">
             </td>
             <td class="center-content">
-                <input type="hidden" name="isVegetarian" value="false">
-                <input type="checkbox" name="isVegetarian" value="true">
+                <input type="checkbox" name="vegetarian" value="true">
+                <input type="hidden" name="vegetarian" value="false">
             </td>
             <td class="center-content">
                 <button type="submit" class="elevate-button">Add Dish</button>
@@ -206,6 +206,7 @@
     });
     /*]]>*/
 </script>
+
 <script>
     // Object to keep track of the sort orders for each column, initializing as ascending
     var sortOrders = {};
