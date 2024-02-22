@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import axiosClient from '../../../utils/axiosClient';
 import MainLayout from '../../layout/MainLayout';
 import './MenuPage.css';
-import vegIcon from '../../../assets/vegetarian_icon.png'
-import spicyIcon from '../../../assets/spicyIcon.svg'
+import vegIcon from '../../../assets/vegetarian_icon2.png'
+import spicyIcon from '../../../assets/spicy_icon.png'
 import { Dish } from '../../../types/dishTypes';
 const API_BASE_URL = `${import.meta.env.VITE_APP_BASE_URL}/api`;
 
