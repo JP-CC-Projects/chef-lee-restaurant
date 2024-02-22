@@ -2,7 +2,7 @@ import './HomePage.css'; // Make sure to create this CSS file
 import MainLayout from '../../../layout/MainLayout';
 import StoreHoursComponent from '../storehours/StoreHoursComponent';
 import MapComponent from '../map/MapComponent';
-import TransparentLogo from '../../../../../assets/cheflee_transparent.png'
+import TransparentLogo from '../../../../assets/cheflee_transparent.png'
 import VisitUsComponent from '../visitus/VisitUsComponent';
 
 const HomePage = () => {
