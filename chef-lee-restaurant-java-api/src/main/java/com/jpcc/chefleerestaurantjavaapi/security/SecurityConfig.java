@@ -33,6 +33,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -98,7 +99,7 @@ public class SecurityConfig {
 	@Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-				.csrf(AbstractHttpConfigurer::disable)
+//				.csrf(AbstractHttpConfigurer::disable)
 				.cors(cors -> cors.configurationSource(corsConfigurationSource()))
 				.authorizeHttpRequests(request -> request
                                         .requestMatchers("/admin/**").hasRole(Role.ADMIN.name())
@@ -106,8 +107,8 @@ public class SecurityConfig {
                                         .requestMatchers("/signin").permitAll()
                                         .anyRequest().permitAll()
                         )
-                .headers(header -> header.frameOptions(frameOption -> frameOption.disable()))
-                .authenticationProvider(authenticationProvider())
+				.headers(headers -> headers.addHeaderWriter(new XFrameOptionsHeaderWriter(
+						XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN)))                .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .formLogin(login -> {login
 		        	.loginPage("/signin")

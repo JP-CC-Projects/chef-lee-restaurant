@@ -61,14 +61,12 @@ const MenuPage = () => {
 
   const getSpecialNotes = (dish: Dish) => {
     let notes = [];
-
+    if (dish.isSpicy) {
+      notes.push(<img key="spicyIcon" src={spicyIcon} alt="Spicy" />);
+    }
     if (dish.isVegetarian) {
       // Using the VegIcon as a React component
       notes.push(<img key="vegIcon" src={vegIcon} alt="Vegetarian" />);
-    }
-
-    if (dish.isSpicy) {
-      notes.push(<img key="spicyIcon" src={spicyIcon} alt="Spicy" />);
     }
     return notes;
   };
