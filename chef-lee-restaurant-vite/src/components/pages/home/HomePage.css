@@ -10,7 +10,7 @@
   /* Adjust the height as needed */
   width: auto;
   background-attachment: fixed;
-  background-position: center center; /* Centers the background image */
+  background-position: center; /* Centers the background image */
   background-repeat: no-repeat;
   background-size: 100% auto; /* Ensure entire width of image is displayed */
 }
