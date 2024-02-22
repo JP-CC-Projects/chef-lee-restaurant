@@ -1,7 +1,7 @@
 // src/App.tsx
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import MenuPage from './components/pages/menu/MenuPage';
-import HomePage from './components/pages/home/HomePage';
+import HomePage from './components/pages/home/homepage/HomePage';
 
 const App: React.FC = () => {
 

@@ -1,0 +1,52 @@
+.flex-container-visit-us {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    padding: 40px;
+    background-color:rgba(35, 35, 35, 0.8); 
+    align-items: center; 
+  }
+  .visit-us h2, .visit-us p { 
+    color: rgb(194, 194, 194);
+    text-align: center; /* Centering text */
+    margin-left: 3rem; 
+    margin-right: 3rem; 
+}
+  .visit-us h2 {
+    margin-bottom: 16px; 
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+  .visit-us p{
+    font-size: .8rem;
+  }
+  
+  .visit-us {
+    display: flex; /* Use flexbox layout */
+    flex-direction: column; 
+    justify-content: center; 
+    padding: 20px;
+    background-color: rgb(40, 40, 40); 
+    border-radius: 8px;
+    height: 100%; 
+  }
+  
+  
+  .storefront-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 8px; 
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 1023px) {
+    .flex-container-visit-us {
+      grid-template-columns: 1fr; 
+    }
+    .visit-us h2, .visit-us p { 
+      margin-left: .5rem; 
+      margin-right: .5rem; 
+  }
+  }
+  

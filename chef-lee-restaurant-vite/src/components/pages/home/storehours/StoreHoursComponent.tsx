@@ -1,9 +1,9 @@
 import './StoreHoursComponent.css'; 
-import steakImage from '../../../assets/steak.webp'
+import steakImage from '../../../../assets/steak.webp'
 
 const StoreHoursComponent = () => {
   return (
-    <div className="flex-container">
+    <div className="flex-container-store-hours">
       <div className="store-hours">
         <h2>Store Hours</h2>
         <p>March - October</p>

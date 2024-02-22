@@ -1,4 +1,4 @@
-.flex-container {
+.flex-container-store-hours {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 20px;
@@ -15,6 +15,7 @@
 }
 .store-hours p{
   color: rgb(255, 255, 255);
+  font-size: .8rem;
 }
 
 .store-hours {
@@ -37,8 +38,8 @@
 }
 
 /* Responsive adjustments */
-@media (max-width: 768px) {
-  .flex-container {
+@media (max-width: 1023px) {
+  .flex-container-store-hours {
     grid-template-columns: 1fr; /* Stack elements on smaller screens */
   }
 }

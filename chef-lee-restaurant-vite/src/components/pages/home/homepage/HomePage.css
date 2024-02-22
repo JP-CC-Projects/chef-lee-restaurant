@@ -16,14 +16,14 @@
 }
 
 #top-parallax-image {
-  background-image: url('../../../assets/bar.webp');
+  background-image: url('../../../../assets/bar.webp');
   height: 80vh;
   position: relative;
   background-size: cover;
 }
 
 #bottom-parallax-image {
-  background-image: url('../../../assets/flower.webp');
+  background-image: url('../../../../assets/flower.webp');
   height: 50vh;
 }
 

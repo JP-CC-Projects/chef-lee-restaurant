@@ -1,8 +1,9 @@
 import './HomePage.css'; // Make sure to create this CSS file
-import MainLayout from '../../layout/MainLayout';
-import StoreHoursComponent from './StoreHoursComponent';
-import MapComponent from './MapComponent';
-import TransparentLogo from '../../../assets/cheflee_transparent.png'
+import MainLayout from '../../../layout/MainLayout';
+import StoreHoursComponent from '../storehours/StoreHoursComponent';
+import MapComponent from '../map/MapComponent';
+import TransparentLogo from '../../../../../assets/cheflee_transparent.png'
+import VisitUsComponent from '../visitus/VisitUsComponent';
 
 const HomePage = () => {
   return (
@@ -12,6 +13,7 @@ const HomePage = () => {
           <img src={TransparentLogo} alt="Logo" className="transparent-logo" />
         </div>
         <StoreHoursComponent />
+        <VisitUsComponent/>
         <MapComponent />
         <div className="parallax" id="bottom-parallax-image"></div>
       </div>
