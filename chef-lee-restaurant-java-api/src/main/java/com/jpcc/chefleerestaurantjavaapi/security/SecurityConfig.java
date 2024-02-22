@@ -33,13 +33,13 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 
 
@@ -65,18 +65,35 @@ public class SecurityConfig {
 
 	@Value("${frontEndBaseUrl}")
 	private String frontEndBaseUrl;
+	@Value("${backEndBaseUrl}")
+	private String backEndBaseUrl;
 	@Bean
 	public CorsConfigurationSource corsConfigurationSource() {
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		CorsConfiguration config = new CorsConfiguration();
-		config.setAllowCredentials(true);
-		config.addAllowedOrigin(frontEndBaseUrl);
-		config.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept"));
-		config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
-		config.setMaxAge(3600L);
-		source.registerCorsConfiguration("/**", config);
+
+		// Frontend CORS configuration
+		CorsConfiguration frontendConfig = new CorsConfiguration();
+		frontendConfig.setAllowCredentials(true);
+		frontendConfig.addAllowedOrigin(frontEndBaseUrl);
+		frontendConfig.setAllowedMethods(Collections.singletonList("GET")); // Restrict to GET for frontend
+		frontendConfig.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept"));
+		frontendConfig.setMaxAge(3600L);
+
+		// Backend CORS configuration
+		CorsConfiguration backendConfig = new CorsConfiguration();
+		backendConfig.setAllowCredentials(true);
+		backendConfig.addAllowedOrigin(backEndBaseUrl);
+		backendConfig.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE")); // Allow all for backend
+		backendConfig.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept"));
+		backendConfig.setMaxAge(3600L);
+
+		// Register configurations
+		source.registerCorsConfiguration("/api/**", frontendConfig); // Assuming frontend uses "/api/**"
+		source.registerCorsConfiguration("/**", backendConfig); // More permissive for backend
+
 		return source;
 	}
+
 
 	@Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
