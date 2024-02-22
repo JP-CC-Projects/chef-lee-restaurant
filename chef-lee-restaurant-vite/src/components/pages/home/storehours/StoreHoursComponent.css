@@ -41,5 +41,6 @@
 @media (max-width: 1023px) {
   .flex-container-store-hours {
     grid-template-columns: 1fr; /* Stack elements on smaller screens */
+    padding: .5rem;
   }
 }

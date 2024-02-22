@@ -43,6 +43,7 @@
   @media (max-width: 1023px) {
     .flex-container-visit-us {
       grid-template-columns: 1fr; 
+      padding: .5rem;
     }
     .visit-us h2, .visit-us p { 
       margin-left: .5rem; 
