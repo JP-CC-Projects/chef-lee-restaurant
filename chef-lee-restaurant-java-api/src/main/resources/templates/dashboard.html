@@ -93,6 +93,9 @@
     </tbody>
 </table>
 <script th:inline="javascript">
+    /*<![CDATA[*/
+    const csrfToken = /*[[${_csrf.token}]]*/ 'CSRF_TOKEN_PLACEHOLDER';
+
     document.addEventListener('DOMContentLoaded', function () {
         const dishes = /*[[${allDishes}]]*/[];
         const categories = [
@@ -146,6 +149,7 @@
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken // Include CSRF token in request headers
                     },
                     body: JSON.stringify({
                         id,
@@ -177,6 +181,10 @@
                 if (confirm('Are you sure you want to delete this dish?')) {
                     fetch(`/admin/deleteDish/${id}`, { // Updated URL to include the dish ID as a path variable
                         method: 'POST', // Assuming POST is the correct method; adjust if your backend expects DELETE or another method
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': csrfToken // Include CSRF token in request headers
+                        },
                     })
                         .then(response => {
                             if (response.ok) {
@@ -196,6 +204,7 @@
             });
         });
     });
+    /*]]>*/
 </script>
 <script>
     // Object to keep track of the sort orders for each column, initializing as ascending
