@@ -16,7 +16,7 @@
 }
 
 #top-parallax-image {
-  background-image: url('../../../../assets/bar.webp');
+  background-image: url('../../../../assets/bar.png');
   height: 80vh;
   position: relative;
   background-size: cover;

@@ -11,8 +11,8 @@ const options = {
 };
 
 const center = {
-  lat: 37.70021602095869,
-  lng: -77.8867058076346
+  lat: 38.08147784030874,
+  lng: -77.85059984686582
 };
 const containerStyle = {
   width: '100%',
