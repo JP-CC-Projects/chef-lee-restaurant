@@ -1,43 +1,64 @@
-import { useState, useEffect } from 'react';
-import axiosClient from '../../../utils/axiosClient';
+import { useState } from 'react';
 import MainLayout from '../../layout/MainLayout';
 import './MenuPage.css';
-import vegIcon from '../../../assets/vegetarian_icon2.png'
-import spicyIcon from '../../../assets/spicy_icon.png'
-import { Dish } from '../../../types/dishTypes';
-const API_BASE_URL = `${import.meta.env.VITE_APP_BASE_URL}/api`;
+import vegIcon from '../../../assets/vegetarian_icon2.png';
+import spicyIcon from '../../../assets/spicy_icon.png';
+import { Dish, DishCategory, DishCategoryDisplayName } from '../../../types/dishTypes';
+
+// Static array of hardcoded dishes
+const hardCodedDishes: Dish[] = [
+  {
+    id: 1,
+    currentlyOnMenu: true,
+    name: 'Chicken Satay',
+    description: 'Grilled marinated chicken served with a delicious peanut sauce.',
+    price: 12.99,
+    category: DishCategory.CHICKEN,
+    isSpicy: true,
+    isPescatarian: false,
+    isVegetarian: false,
+    hasTreeNuts: false,
+    hasPeanuts: true,
+    hasEggs: false,
+    hasMilk: false,
+    hasShellfish: false,
+    hasSoy: false,
+    hasWheat: false,
+  },
+  {
+    id: 2,
+    currentlyOnMenu: true,
+    name: 'Vegetarian Spring Rolls',
+    description: 'Crispy rolls filled with fresh vegetables.',
+    price: 6.5,
+    category: DishCategory.APPETIZER,
+    isSpicy: false,
+    isPescatarian: true,
+    isVegetarian: true,
+    hasTreeNuts: false,
+    hasPeanuts: false,
+    hasEggs: false,
+    hasMilk: false,
+    hasShellfish: false,
+    hasSoy: false,
+    hasWheat: false,
+  },
+];
 
 const MenuPage = () => {
-  // Specify the type of dishes as Dish[]
-  const [dishes, setDishes] = useState<Dish[]>([]);
-  const [error, setError] = useState('');
+  const [dishes] = useState<Dish[]>(hardCodedDishes);
 
-  const fetchDishes = async () => {
-    try {
-      const response = await axiosClient.get<Dish[]>(`${API_BASE_URL}/getDishes`);
-      setDishes(response.data);
-    } catch (error: any) {
-      const errorMessage = error.response && error.response.data.message ? error.response.data.message : (error.message ? error.message : 'An unknown error occurred');
-      console.error('Error fetching dishes:', errorMessage);
-      setError(errorMessage);
-    }
-  };
-
-  useEffect(() => {
-    fetchDishes();
-  }, []);
-
-  const lunchSpecials = dishes.filter(dish => dish.category === 'LUNCH_SPECIAL');
-  const appetizers = dishes.filter(dish => dish.category === 'APPETIZER');
-  const soups = dishes.filter(dish => dish.category === 'SOUP');
-  const chefsSuggestions = dishes.filter(dish => dish.category === 'CHEF_SUGGESTION');
-  const noodlesAndRice = dishes.filter(dish => dish.category === 'NOODLES_AND_RICE');
-  const chicken = dishes.filter(dish => dish.category === 'CHICKEN');
-  const pork = dishes.filter(dish => dish.category === 'PORK');
-  const beef = dishes.filter(dish => dish.category === 'BEEF');
-  const seafood = dishes.filter(dish => dish.category === 'SEAFOOD');
-  const vegetables = dishes.filter(dish => dish.category === 'VEGETABLE');
-  const desserts = dishes.filter(dish => dish.category === 'DESSERT');
+  const lunchSpecials = dishes.filter(dish => dish.category === DishCategory.LUNCH_SPECIAL);
+  const appetizers = dishes.filter(dish => dish.category === DishCategory.APPETIZER);
+  const soups = dishes.filter(dish => dish.category === DishCategory.SOUP);
+  const chefsSuggestions = dishes.filter(dish => dish.category === DishCategory.CHEF_SUGGESTION);
+  const noodlesAndRice = dishes.filter(dish => dish.category === DishCategory.NOODLES_AND_RICE);
+  const chicken = dishes.filter(dish => dish.category === DishCategory.CHICKEN);
+  const pork = dishes.filter(dish => dish.category === DishCategory.PORK);
+  const beef = dishes.filter(dish => dish.category === DishCategory.BEEF);
+  const seafood = dishes.filter(dish => dish.category === DishCategory.SEAFOOD);
+  const vegetables = dishes.filter(dish => dish.category === DishCategory.VEGETABLE);
+  const desserts = dishes.filter(dish => dish.category === DishCategory.DESSERT);
 
   const renderDishList = (dishList: Dish[]) => (
     <ul className="menu-grid">
@@ -46,8 +67,10 @@ const MenuPage = () => {
           <div className="dish-header">
             <span className="dish-name"><strong>{dish.name}</strong></span>
             <span className="dish-price">
-              ${dish.price !== null && dish.price !== undefined ? 
-                Number.isInteger(dish.price) ? dish.price : dish.price.toFixed(2)
+              ${dish.price !== null && dish.price !== undefined
+                ? Number.isInteger(dish.price)
+                  ? dish.price
+                  : dish.price.toFixed(2)
                 : 'N/A'}
             </span>
           </div>
@@ -57,7 +80,6 @@ const MenuPage = () => {
       ))}
     </ul>
   );
-  
 
   const getSpecialNotes = (dish: Dish) => {
     let notes = [];
@@ -65,70 +87,80 @@ const MenuPage = () => {
       notes.push(<img key="spicyIcon" src={spicyIcon} alt="Spicy" />);
     }
     if (dish.isVegetarian) {
-      // Using the VegIcon as a React component
       notes.push(<img key="vegIcon" src={vegIcon} alt="Vegetarian" />);
     }
     return notes;
   };
+
   return (
     <MainLayout>
       <div className="menu-container">
         <h1 className="menu-title">Menu</h1>
-        {error && <p className="menu-error">Error: {error}</p>}
+
         <section className="menu-section">
           <h2 className="menu-section-title">Lunch Specials</h2>
           <hr />
-          <p className="menu-section-text">Served daily from 11:30am to 2:30pm.
-            Each meal comes with fried rice and a choice of egg roll or soup.
-            Soup options are wonton soup, hot & sour soup, or egg drop soup.</p>
-
+          <p className="menu-section-text">
+            Served daily from 11:30am to 2:30pm. Each meal comes with fried rice and a choice of egg roll or soup.
+            Soup options are wonton soup, hot & sour soup, or egg drop soup.
+          </p>
           {renderDishList(lunchSpecials)}
         </section>
+
         <section className="menu-section">
           <h2 className="menu-section-title">Appetizers</h2>
           <hr />
           {renderDishList(appetizers)}
         </section>
+
         <section className="menu-section">
           <h2 className="menu-section-title">Soups</h2>
           <hr />
           {renderDishList(soups)}
         </section>
+
         <section className="menu-section">
           <h2 className="menu-section-title">Chef's Suggestions</h2>
           <hr />
           {renderDishList(chefsSuggestions)}
         </section>
+
         <section className="menu-section">
           <h2 className="menu-section-title">Noodles and Rice</h2>
           <hr />
           {renderDishList(noodlesAndRice)}
         </section>
+
         <section className="menu-section">
           <h2 className="menu-section-title">Chicken</h2>
           <hr />
           {renderDishList(chicken)}
         </section>
+
         <section className="menu-section">
           <h2 className="menu-section-title">Pork</h2>
           <hr />
           {renderDishList(pork)}
         </section>
+
         <section className="menu-section">
           <h2 className="menu-section-title">Beef</h2>
           <hr />
           {renderDishList(beef)}
         </section>
+
         <section className="menu-section">
           <h2 className="menu-section-title">Seafood</h2>
           <hr />
           {renderDishList(seafood)}
         </section>
+
         <section className="menu-section">
           <h2 className="menu-section-title">Vegetable</h2>
           <hr />
           {renderDishList(vegetables)}
         </section>
+
         <section className="menu-section">
           <h2 className="menu-section-title">Desserts</h2>
           <hr />
@@ -137,7 +169,6 @@ const MenuPage = () => {
       </div>
     </MainLayout>
   );
-
 };
 
 export default MenuPage;
