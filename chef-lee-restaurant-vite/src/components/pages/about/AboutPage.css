@@ -1,0 +1,60 @@
+/* AboutPage.css */
+
+/* Container for the About page: Matches .menu-container colors and padding */
+.about-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px 40px;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 5px;
+}
+
+/* Main title for the About page: Similar to .menu-title */
+.about-title {
+  text-align: center;
+  font-size: 2rem;
+  color: white;
+  font-weight: bold;
+  margin-bottom: 1.25rem;
+}
+
+/* Each about section container */
+.about-section {
+  margin-bottom: 1.5rem;
+}
+
+/* Section titles: Adopts the style from .menu-section-title */
+.about-section-title {
+  font-size: 1.25rem;
+  color: white;
+  font-weight: bold;
+  margin-bottom: 0.625rem;
+  border-bottom: 2px solid red;  /* Matching the hr style from menu page */
+  padding-bottom: 0.5rem;
+}
+
+/* Paragraph text for the about content: Corresponds to .menu-section-text */
+.about-text {
+  font-size: 1rem;
+  color: white;
+  margin-bottom: 2rem;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 599px) {
+  .about-container {
+    padding: 20px;
+  }
+  
+  .about-title {
+    font-size: 1.75rem;
+  }
+  
+  .about-section-title {
+    font-size: 1rem;
+  }
+  
+  .about-text {
+    font-size: 0.8rem;
+  }
+}
